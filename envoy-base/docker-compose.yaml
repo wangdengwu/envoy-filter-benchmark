@@ -1,0 +1,46 @@
+version: "3.7"
+services:
+  envoy:
+    image: envoyproxy/envoy:v1.26.4-envoy-base
+    build: .
+    hostname: envoy
+    ports:
+      - "10000:10000"
+    environment:
+      - GODEBUG=cgocheck=0
+    volumes:
+      - ./envoy.yaml:/etc/envoy/envoy.yaml
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:10000/" ]
+      interval: 1s
+    networks:
+      - envoymesh
+    depends_on:
+      nginx:
+        condition:
+          service_healthy
+  nginx:
+    image: nginx
+    hostname: nginx
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:10001/" ]
+      interval: 1s
+    networks:
+      - envoymesh
+  fortio:
+    image: fortio/fortio
+    hostname: fortio
+    volumes:
+      - ./:/var/lib/fortio
+    command: load -t 30s -c 10 -qps 0 -labels "envoy-base" -a http://envoy:10000/
+    depends_on:
+      envoy:
+        condition:
+          service_healthy
+    networks:
+      - envoymesh
+
+networks:
+  envoymesh: { }

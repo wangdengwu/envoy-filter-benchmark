@@ -1,0 +1,26 @@
+[package]
+publish = false
+name = "proxy-wasm-basic-auth-rust"
+version = "0.1.0"
+authors = ["Dengwu Wang <me@dengwu.wang>"]
+description = "Proxy-Wasm plugin example: Basic-Auth"
+license = "Apache-2.0"
+edition = "2021"
+
+[lib]
+name = "rust"
+crate-type = ["cdylib"]
+
+[dependencies]
+proxy-wasm = "0.2.1"
+http-auth-basic = "0.3.3"
+log = "0.4"
+serde = { version = "1.0.183", features = ["derive"] }
+serde_json = "1.0.105"
+
+[profile.release]
+lto = true
+opt-level = 3
+codegen-units = 1
+panic = "abort"
+strip = "debuginfo"

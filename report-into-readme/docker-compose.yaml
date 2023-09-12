@@ -1,0 +1,15 @@
+version: "3.7"
+services:
+  report-into-readme:
+    image: wangdengwu/report-into-readme:0.1.0
+    build: .
+    volumes:
+      - ../report-passthrough:/etc/report/report-passthrough
+      - ../report-basic-auth:/etc/report/report-basic-auth
+      - ../assets:/etc/report/assets
+      - ../README.md:/etc/report/README.md
+    environment:
+      - DEFAULT_REPORT_PASSTHROUGH_DIR=/etc/report/report-passthrough
+      - DEFAULT_REPORT_BASIC_AUTH_DIR=/etc/report/report-basic-auth
+      - DEFAULT_REPORT_SVG_DIR=/etc/report/assets
+      - DEFAULT_README_MD=/etc/report/README.md

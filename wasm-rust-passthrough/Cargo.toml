@@ -1,0 +1,22 @@
+[package]
+publish = false
+name = "proxy-wasm-passthrough-rust"
+version = "0.1.0"
+authors = ["Dengwu Wang <me@dengwu.wang>"]
+description = "Proxy-Wasm plugin example: Passthrough"
+license = "Apache-2.0"
+edition = "2021"
+
+[lib]
+name = "rust"
+crate-type = ["cdylib"]
+
+[dependencies]
+proxy-wasm = "0.2.1"
+
+[profile.release]
+lto = true
+opt-level = 3
+codegen-units = 1
+panic = "abort"
+strip = "debuginfo"
