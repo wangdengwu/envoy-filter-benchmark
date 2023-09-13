@@ -2,7 +2,7 @@
 
 # envoy-filter-benchmark
 
-envoy的 filter 目前有 3 种类型，4 种实习方式，本项目对 4 种实现方式进行了压力测试，以方便比较和选择合适的实现方式
+envoy的 filter 目前有 3 种类型，5 种实现方式，本项目对 4 种实现方式进行了压力测试，以方便比较和选择合适的实现方式
 
 3种类型为：
 
@@ -16,6 +16,7 @@ envoy的 filter 目前有 3 种类型，4 种实习方式，本项目对 4 种�
 - 使用 go 语言实现
 - 使用 tinygo 实现的 wasm
 - 使用 rust 实现的 wasm
+- ~~使用 c++ 实现的 wasm~~ (不会 c++)
 
 其中 go 语言的 go 执行引擎目前还在测试阶段，只有**contrib**版本的 envoy 才有此功能
 
@@ -28,7 +29,7 @@ envoy的 filter 目前有 3 种类型，4 种实习方式，本项目对 4 种�
 ## 执行结果
 
 压测脚本会对不同场景，不同实现各执行一次，会使用 fortio 进行压测，压测结果文件分别放在 report-passthrough 和 report-basic-auth 目录下
-然后执行 report-to-svg 代码进行分析生成柱状图，使用模版生成此 README 文件
+然后执行 report-into-readme 代码进行分析生成柱状图，使用模版生成此 README 文件
 
 ### passthrough 场景
 
@@ -61,3 +62,12 @@ P50-P99.9 的柱状图
 P50-P99.9 的柱状图
 
 ![](assets/basic_auth.svg)
+
+## 结论
+
+1. 不管是何种实现方式，p50-p99 的响应都差别不大
+2. 但是 qps 表现最好的是 rust 实现方式
+3. tinygo 不推荐使用，因为 Max 响应时间太长，导致 qps 垫底
+4. go 语言的 go 执行引擎目前还在测试阶段，只有**contrib**版本的 envoy 才有此功能，可能需要定制 istio 的 envoy image，才能运行
+5. lua 的 qps 也基本倒数，符合无 JIT 优化的表现
+6. rust 的稳定性和 qps 是最好的，也是最为推荐的

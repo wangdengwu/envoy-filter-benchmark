@@ -1,4 +1,5 @@
 use std::fs::File;
+use std::path::MAIN_SEPARATOR_STR;
 
 use handlebars::{Context, Handlebars, Helper, JsonRender, Output, RenderContext, RenderError, to_json};
 use serde::{Deserialize, Serialize};
@@ -29,8 +30,10 @@ pub fn generate_readme(passthrough_fortio_reports: &Vec<FortioReport>, basic_aut
     let mut data = Map::new();
     data.insert("passthrough_data".to_string(), to_json(passthrough_data));
     data.insert("basic_auth_data".to_string(), to_json(basic_auth_data));
+    let template_dir = EnvConfig::get_instance().template_dir.clone();
+
     handlebars
-        .register_template_file("template", "./template/readme.hbs")
+        .register_template_file("template", template_dir + MAIN_SEPARATOR_STR + "readme.hbs")
         .unwrap();
     let readme_md = EnvConfig::get_instance().report_readme_md.clone();
     let mut output_file = File::create(readme_md).unwrap();

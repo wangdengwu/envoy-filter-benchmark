@@ -21,7 +21,11 @@ static_resources:
                           name: "http_config"
                           configuration:
                             "@type": "type.googleapis.com/google.protobuf.StringValue"
-                            value: '{"username":"dengwu.wang","password":"password"}'
+                            value: |
+                              {
+                                "username":"dengwu.wang",
+                                "password":"password"
+                              }
                           vm_config:
                             runtime: "envoy.wasm.runtime.v8"
                             code:

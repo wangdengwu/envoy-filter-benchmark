@@ -17,6 +17,9 @@ bench_model() {
 
   cd "$1"
 
+  # shellcheck disable=SC2035
+  rm -rf *.json
+
   echo "====== start benchmark ======"
 
   do_benchmark "$2"
